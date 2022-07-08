@@ -39,7 +39,7 @@ def connect(url,proxies):
 			except Exception as e:
 				i = i - 1
 				url = url.replace('http://','')
-				out = url + ' ----- 连接出错' + ' ----- ' + str(e)
+				out = url + ' ----- 连接出错 ----- ' + str(e)
 				print(out)
 				time.sleep(3)
 	log(out)
