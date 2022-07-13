@@ -21,30 +21,35 @@ def ok(ok):
 
 def connect(url,proxies):
 	headers = {"Connection":"close","User-Agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36","Accept-Encoding":"gzip, deflate","X-Forwarded-For":"127.0.0.1"}
-	i = 3
+	requests.packages.urllib3.disable_warnings()
+	i = 2
 	while i != 0:
 		if 'https://' in url or 'http://' in url:
-			url = url
-		else:
-			url = 'https://' + url
-		try:
-			requests.packages.urllib3.disable_warnings()
-			response = requests.get(url=url,headers=headers,proxies=proxies,verify=False,timeout=60)
-			return url
-		except:
-			url = url.replace('https://','http://')
 			try:
 				response = requests.get(url=url,headers=headers,proxies=proxies,verify=False,timeout=60)
 				return url
 			except Exception as e:
-				i = i - 1
-				url = url.replace('http://','')
-				out = url + ' ----- 连接出错 ----- ' + str(e)
-				print(out)
-				time.sleep(3)
-	log(out)
-	url = ''
-	return url
+					i = i - 1
+					error = str(e)
+					time.sleep(2)
+		else:
+			url = 'https://' + url
+			try:
+				response = requests.get(url=url,headers=headers,proxies=proxies,verify=False,timeout=60)
+				return url
+			except:
+				url = url.replace('https://','http://')
+				try:
+					response = requests.get(url=url,headers=headers,proxies=proxies,timeout=60)
+					return url
+				except Exception as e:
+					url = url.replace('http://','')
+					i = i - 1
+					error = str(e)
+					time.sleep(2)
+	print(url + ' ----- 连接出错！')
+	log(url + ' ----- 连接出错 ----- ' + error)
+	return ''
 
 def poc(url,proxies):
 	print(url)
